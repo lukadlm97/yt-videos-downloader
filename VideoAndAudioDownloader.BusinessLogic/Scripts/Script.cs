@@ -26,15 +26,34 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
 
             try
             {
-                await _downloader.SaveMP3(videoUrl);
-
+                await _downloader.SaveSingleVideoMP3(videoUrl);
+                _logger.LogInformation("Successfully completed import for video: " + videoUrl);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error occurred on import {videoUrl} with exception message: " + ex.Message);
                 // return false;
             }
+        }
 
+        public async Task ImportPlaylist(string playlistUrl)
+        {
+            _logger.LogInformation("Import started for videoUrl: " + playlistUrl);
+
+            try
+            {
+                if (!await _downloader.SavePlaylistMP3(playlistUrl))
+                {
+                    _logger.LogError("Not completed import!!!");
+                    return;
+                }
+                _logger.LogInformation("Successfully completed import for video: " + playlistUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred on import {playlistUrl} with exception message: " + ex.Message);
+                // return false;
+            }
         }
     }
 }

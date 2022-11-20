@@ -9,5 +9,6 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
     public interface IScript
     {
         Task Import([Option("videoUrl")]string videoUrl);
+        Task ImportPlaylist([Option("playlistUrl")]string playlistUrl);
     }
 }
