@@ -40,7 +40,8 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
 
         [Command("importPlaylist", "Command for download playlist of audio file from YT with specified url.")]
         public async Task ImportPlaylist([Option("u", "url of yt playlist")] string playlistUrl,
-            [Option("o", "output path where yt playlist should be saved")] string? folderPath=default
+            [Option("o", "output path where yt playlist should be saved")] string? folderPath=default,
+             [Option("ignorePlaylistName")] bool ignorePlaylistName = default
 
         )
         {

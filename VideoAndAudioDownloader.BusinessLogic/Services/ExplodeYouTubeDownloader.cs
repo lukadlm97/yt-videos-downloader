@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YoutubeExplode;
+﻿using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
 
@@ -35,13 +29,11 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
                         }
                     }
 
-                    using (var stream = File.OpenWrite(Path.Combine(outputFolder, path)))
-                    {
-                        await youtube.Videos.Streams.CopyToAsync(streamInfo,
-                            stream,
-                            cancellationToken: cancellationToken);
-                        return true;
-                    }
+                    await using var stream = File.OpenWrite(Path.Combine(outputFolder, path));
+                    await youtube.Videos.Streams.CopyToAsync(streamInfo,
+                        stream,
+                        cancellationToken: cancellationToken);
+                    return true;
                 }
               
                 // Download the stream to a file
