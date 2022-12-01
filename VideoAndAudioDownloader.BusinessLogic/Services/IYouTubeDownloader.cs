@@ -8,7 +8,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
 {
     public interface IYouTubeDownloader
     {
-        Task<bool> SaveSingleVideoMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default);
-        Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default);
+        Task<bool> SaveSingleVideoMP3(string videoUrl,bool isPlaylist=default, string outputFolder = null, CancellationToken cancellationToken = default);
+        Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null,bool ignorePlaylistName=default, CancellationToken cancellationToken = default);
     }
 }

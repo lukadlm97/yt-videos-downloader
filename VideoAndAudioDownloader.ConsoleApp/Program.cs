@@ -9,7 +9,6 @@ using VideoAndAudioDownloader.BusinessLogic.Scripts;
 using VideoAndAudioDownloader.BusinessLogic.Services;
 
 
-/*
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostingContext,services) =>
     {
@@ -17,7 +16,7 @@ var host = Host.CreateDefaultBuilder(args)
             hostingContext.Configuration.GetSection(nameof(VideoAndAudioDownloader.BusinessLogic.Configurations
                 .HostedServiceSettings)));
 
-        services.AddSingleton<IYouTubeDownloader, YouTubeDownloader>();
+        services.AddSingleton<IYouTubeDownloader, ExplodeYouTubeDownloader>();
     });
 
 
@@ -26,11 +25,11 @@ var host = Host.CreateDefaultBuilder(args)
 var app = ConsoleApp.CreateFromHostBuilder(host, args);
 app.AddCommands<Script>();
 await app.RunAsync();
-*/
 
+/*
 IYouTubeDownloader youTubeDownloader = new ExplodeYouTubeDownloader();
 await youTubeDownloader.SavePlaylistMP3("https://www.youtube.com/playlist?list=PL0-G9moQHFshAHypJ7NA55dsU7viJq7XZ");
 
-
+*/
 
 

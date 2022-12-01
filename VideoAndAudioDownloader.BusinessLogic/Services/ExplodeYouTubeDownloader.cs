@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
 {
     public class ExplodeYouTubeDownloader:IYouTubeDownloader
     {
-        public async Task<bool> SaveSingleVideoMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
+        public async Task<bool> SaveSingleVideoMP3(string videoUrl,bool isPlaylist=default, string outputFolder = null, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -23,9 +24,30 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
 
                 // You can specify both video ID or URL
                 var video = await youtube.Videos.GetAsync(videoUrl,cancellationToken);
-           
+                var path = $"{video.Title}.{streamInfo.Container}";
+                if (!string.IsNullOrWhiteSpace(outputFolder))
+                {
+                    if (isPlaylist)
+                    {
+                        if (!Directory.Exists(outputFolder))
+                        {
+                            Directory.CreateDirectory(outputFolder);
+                        }
+                    }
+
+                    using (var stream = File.OpenWrite(Path.Combine(outputFolder, path)))
+                    {
+                        await youtube.Videos.Streams.CopyToAsync(streamInfo,
+                            stream,
+                            cancellationToken: cancellationToken);
+                        return true;
+                    }
+                }
+              
                 // Download the stream to a file
-                await youtube.Videos.Streams.DownloadAsync(streamInfo, $"{video.Title}.{streamInfo.Container}",cancellationToken:cancellationToken);
+                await youtube.Videos.Streams.DownloadAsync(streamInfo,
+                    path,
+                    cancellationToken:cancellationToken);
                 return true;
             }
             catch (Exception ex)
@@ -35,7 +57,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
             }
         }
 
-        public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
+        public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null,bool ignorePlaylistName=default, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -43,13 +65,17 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
 
                 var playlist = await youtube.Playlists.GetAsync(videoUrl, cancellationToken);
 
-
                 // Get all playlist videos
                 var videos = await youtube.Playlists.GetVideosAsync(videoUrl,cancellationToken);
-
+                
                 foreach (var playlistVideo in videos)
                 {
-                    await SaveSingleVideoMP3(playlistVideo.Url, cancellationToken: cancellationToken);
+                    var path = outputFolder;
+                    if (ignorePlaylistName)
+                    {
+                        path = Path.Combine(outputFolder, playlist.Title);
+                    }
+                    await SaveSingleVideoMP3(playlistVideo.Url,true,path, cancellationToken: cancellationToken);
                 }
 
                 return true;

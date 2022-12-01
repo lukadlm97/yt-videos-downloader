@@ -20,13 +20,15 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
             _downloader = downloader;
         }
 
-        public async Task Import(string videoUrl)
+        [Command("importSingleFile","Command for download single audio file from YT with specified url.")]
+        public async Task Import([Option("u","url of yt video")]string videoUrl,
+            [Option("o", "output path where yt video should be saved")] string? folderPath=default)
         {
             _logger.LogInformation("Import started for videoUrl: " + videoUrl);
 
             try
             {
-                await _downloader.SaveSingleVideoMP3(videoUrl);
+                await _downloader.SaveSingleVideoMP3(videoUrl,false,folderPath, this.Context.CancellationToken);
                 _logger.LogInformation("Successfully completed import for video: " + videoUrl);
             }
             catch (Exception ex)
@@ -36,18 +38,22 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
             }
         }
 
-        public async Task ImportPlaylist(string playlistUrl)
+        [Command("importPlaylist", "Command for download playlist of audio file from YT with specified url.")]
+        public async Task ImportPlaylist([Option("u", "url of yt playlist")] string playlistUrl,
+            [Option("o", "output path where yt playlist should be saved")] string? folderPath=default
+
+        )
         {
-            _logger.LogInformation("Import started for videoUrl: " + playlistUrl);
+            _logger.LogInformation("Import started for playlistUrl: " + playlistUrl);
 
             try
             {
-                if (!await _downloader.SavePlaylistMP3(playlistUrl))
+                if (!await _downloader.SavePlaylistMP3(playlistUrl,folderPath,this.Context.CancellationToken))
                 {
-                    _logger.LogError("Not completed import!!!");
+                    _logger.LogError("Not completed import for playlist!!!");
                     return;
                 }
-                _logger.LogInformation("Successfully completed import for video: " + playlistUrl);
+                _logger.LogInformation("Successfully completed import for playlist: " + playlistUrl);
             }
             catch (Exception ex)
             {

@@ -26,7 +26,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
         {
             _logger = logger;
         }
-        public async Task<bool> SaveSingleVideoMP3(string videoUrl, string outputFolder =null, CancellationToken cancellationToken=default)
+        public async Task<bool> SaveSingleVideoMP3(string videoUrl,bool isPlaylist=default, string outputFolder =null, CancellationToken cancellationToken=default)
         {
             try
             {
