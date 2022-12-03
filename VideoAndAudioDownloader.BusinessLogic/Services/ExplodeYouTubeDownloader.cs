@@ -10,7 +10,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
         {
             try
             {
-                var youtube = new YoutubeClient();
+                var youtube = YouTubeClientFactory.CreateYoutubeClient();
 
                 var streamManifest = await youtube.Videos.Streams.GetManifestAsync(videoUrl,cancellationToken);
                 var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
@@ -53,7 +53,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
         {
             try
             {
-                var youtube = new YoutubeClient();
+                var youtube = YouTubeClientFactory.CreateYoutubeClient();
 
                 var playlist = await youtube.Playlists.GetAsync(videoUrl, cancellationToken);
 

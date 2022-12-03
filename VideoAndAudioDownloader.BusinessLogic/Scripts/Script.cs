@@ -49,7 +49,7 @@ namespace VideoAndAudioDownloader.BusinessLogic.Scripts
 
             try
             {
-                if (!await _downloader.SavePlaylistMP3(playlistUrl,folderPath,this.Context.CancellationToken))
+                if (!await _downloader.SavePlaylistMP3(playlistUrl,folderPath,false,this.Context.CancellationToken))
                 {
                     _logger.LogError("Not completed import for playlist!!!");
                     return;

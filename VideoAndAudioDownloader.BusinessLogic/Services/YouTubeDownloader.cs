@@ -44,6 +44,12 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
          
         }
 
+        public Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, bool ignorePlaylistName = default,
+            CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
         {
             try
