@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VideoAndAudioDownloader.Desktop.Models;
 using VideoAndAudioDownloader.Desktop.ViewModels;
+using VideoAndAudioDownloader.Desktop.ViewModels.Common;
 
 namespace VideoAndAudioDownloader.Desktop
 {
@@ -22,10 +24,13 @@ namespace VideoAndAudioDownloader.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(MainWindowViewModel mainWindowViewModel)
+
+        public MainWindow()
         {
-            this.DataContext = mainWindowViewModel;
-          //  DataContext = mainWindowViewModel;
+            DataContext = new MainWindowViewModel()
+            {
+                NavMenuSelectionStatus = NavMenuSelectionStatus.Home
+            };
             InitializeComponent();
         }
     }

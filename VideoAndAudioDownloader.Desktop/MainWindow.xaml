@@ -7,18 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ListView Name="Persons" ItemsSource="{Binding PersonsViewModel}">
-            <ListView.View>
-                <GridView x:Name="grdPerson">
-                    <GridViewColumn Header="Name"
-                                    DisplayMemberBinding="{Binding Name}" Width="40">
-                    </GridViewColumn>
-                    <GridViewColumn Header="Age"
-                                    DisplayMemberBinding="{Binding Age}" Width="40">
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-
-        </ListView>
+       
     </Grid>
 </Window>
