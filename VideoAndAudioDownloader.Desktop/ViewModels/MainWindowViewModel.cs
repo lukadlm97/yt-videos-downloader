@@ -13,5 +13,6 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
     public class MainWindowViewModel
     {
         public NavMenuSelectionStatus NavMenuSelectionStatus { get; set; }
+        public string PlaylistUrl { get; set; }
     }
 }
