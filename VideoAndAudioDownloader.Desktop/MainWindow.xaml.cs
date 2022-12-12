@@ -32,8 +32,9 @@ namespace VideoAndAudioDownloader.Desktop
         public MainWindow()
         {
             InitializeComponent();
-            myGrid.DataContext = MainWindowViewModel;
-            ButtonCommand = new RelayCommand(o => MainButtonClick("MainWindow"));
+            MainWindowViewModel.ButtonCommand = new RelayCommand(o => MainButtonClick("MainWindow"));
+            MainWindowViewModel.PlaylistUrl = "past playlist url";
+            this.DataContext = MainWindowViewModel;
         }
 
         private void MainButtonClick(object sender)
