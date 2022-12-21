@@ -1,4 +1,7 @@
-﻿using YoutubeExplode;
+﻿using VideoAndAudioDownloader.BusinessLogic.Enumerations;
+using VideoAndAudioDownloader.BusinessLogic.Models;
+using VideoAndAudioDownloader.BusinessLogic.Models.DTO;
+using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
 
@@ -78,6 +81,57 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
                 return false;
             }
 
+
+        }
+
+        public async Task<PlaylistResponse> GetPlaylistSongs(string videoUrl, CancellationToken cancellationToken = default)
+        {
+            var response = new PlaylistResponse()
+            {
+                OperationStatus = OperationStatus.Success
+            };
+            try
+            {
+                var youtube = YouTubeClientFactory.CreateYoutubeClient();
+
+                var playlist = await youtube.Playlists.GetAsync(videoUrl, cancellationToken);
+                if (playlist == null)
+                {
+
+                    response.OperationStatus = OperationStatus.NotFound;
+                    return response;
+                }
+
+                var realPlaylist = new Playlist()
+                {
+                    Name = playlist.Title,
+                };
+                var realSongs = new List<Song>();
+                // Get all playlist videos
+                var videos = await youtube.Playlists.GetVideosAsync(videoUrl, cancellationToken);
+
+                foreach (var playlistVideo in videos)
+                {
+                    var song = new Song()
+                    {
+                        Title = playlistVideo.Title,
+                        Channel = playlistVideo.Author.ChannelTitle,
+                        Duration = playlistVideo.Duration.ToString(), 
+                        Url= playlistVideo.Url
+                    };
+                    realSongs.Add(song);
+                }
+
+                realPlaylist.Songs = realSongs;
+                response.Playlist = realPlaylist;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.OperationStatus = OperationStatus.BadRequest;
+            }
+
+            return response;
 
         }
     }

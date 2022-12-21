@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VideoAndAudioDownloader.BusinessLogic.Models.DTO;
 
 namespace VideoAndAudioDownloader.Desktop.Models
 {
@@ -10,6 +11,7 @@ namespace VideoAndAudioDownloader.Desktop.Models
     {
         Task<IEnumerable<Person>> GetAllPersons();
         Task<Person> GetPersonById(int id);
+        Task<PlaylistResponse> GetPlaylist(string videoUrl);
 
     }
 }

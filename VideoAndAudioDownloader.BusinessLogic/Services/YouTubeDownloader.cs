@@ -15,6 +15,8 @@ using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using VideoAndAudioDownloader.BusinessLogic.Models;
+using VideoAndAudioDownloader.BusinessLogic.Models.DTO;
 
 namespace VideoAndAudioDownloader.BusinessLogic.Services
 {
@@ -49,6 +51,12 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<PlaylistResponse> GetPlaylistSongs(string videoUrl, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
         {

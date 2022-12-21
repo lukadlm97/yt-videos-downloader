@@ -8,7 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\icons\yt-icon.png" />
+    <None Remove="assets\main-window\search.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\icons\yt-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\main-window\search.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VideoAndAudioDownloader.BusinessLogic\VideoAndAudioDownloader.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

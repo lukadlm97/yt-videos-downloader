@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VideoAndAudioDownloader.BusinessLogic.Enumerations;
+using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.Desktop.Commands;
 using VideoAndAudioDownloader.Desktop.Models;
 using VideoAndAudioDownloader.Desktop.ViewModels;
@@ -28,18 +30,32 @@ namespace VideoAndAudioDownloader.Desktop
     public partial class MainWindow : Window,INotifyPropertyChanged
     {
         public ICommand ButtonCommand { get; set; }
-        private MainWindowViewModel MainWindowViewModel =new MainWindowViewModel();
-        public MainWindow()
+        private MainWindowViewModel MainWindowViewModel;
+        private readonly IStorage storage;
+
+        public MainWindow(IStorage storage)
         {
+            this.storage = storage;
             InitializeComponent();
+            MainWindowViewModel = new MainWindowViewModel(storage);
             MainWindowViewModel.ButtonCommand = new RelayCommand(o => MainButtonClick("MainWindow"));
             MainWindowViewModel.PlaylistUrl = "past playlist url";
+            MainWindowViewModel.Songs = new ObservableCollection<Song>();
             this.DataContext = MainWindowViewModel;
         }
 
-        private void MainButtonClick(object sender)
+        private async void MainButtonClick(object sender)
         {
-            MessageBox.Show(MainWindowViewModel.PlaylistUrl);
+           // MessageBox.Show(MainWindowViewModel.PlaylistUrl);
+           var response = await storage.GetPlaylist(MainWindowViewModel.PlaylistUrl);
+           if (response.OperationStatus == OperationStatus.Success)
+           {
+               MainWindowViewModel.Songs = new ObservableCollection<Song>(response.Playlist.Songs);
+           }
+           else
+           {
+               MessageBox.Show("invalid url:"+ MainWindowViewModel.PlaylistUrl);
+            }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 

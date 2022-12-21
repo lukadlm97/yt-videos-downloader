@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using VideoAndAudioDownloader.BusinessLogic.Services;
 using VideoAndAudioDownloader.Desktop.Models;
 using VideoAndAudioDownloader.Desktop.ViewModels;
 
@@ -29,8 +30,8 @@ namespace VideoAndAudioDownloader.Desktop
         {
             serviceCollection.AddScoped<IStorage, Storage>();
             serviceCollection.AddSingleton<MainWindow>();
-
             serviceCollection.AddSingleton<MainWindowViewModel>();
+            serviceCollection.AddSingleton<IYouTubeDownloader, ExplodeYouTubeDownloader>();
         }
 
         protected  void OnStartup(object sender, StartupEventArgs e)
