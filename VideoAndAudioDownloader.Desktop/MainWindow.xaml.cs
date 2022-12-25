@@ -7,15 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.Desktop.Commands;
 using VideoAndAudioDownloader.Desktop.Models;
@@ -29,34 +20,17 @@ namespace VideoAndAudioDownloader.Desktop
     /// </summary>
     public partial class MainWindow : Window,INotifyPropertyChanged
     {
-        public ICommand ButtonCommand { get; set; }
         private MainWindowViewModel MainWindowViewModel;
-        private readonly IStorage storage;
 
         public MainWindow(IStorage storage)
         {
-            this.storage = storage;
             InitializeComponent();
             MainWindowViewModel = new MainWindowViewModel(storage);
-            MainWindowViewModel.ButtonCommand = new RelayCommand(o => MainButtonClick("MainWindow"));
             MainWindowViewModel.PlaylistUrl = "past playlist url";
             MainWindowViewModel.Songs = new ObservableCollection<Song>();
             this.DataContext = MainWindowViewModel;
         }
 
-        private async void MainButtonClick(object sender)
-        {
-           // MessageBox.Show(MainWindowViewModel.PlaylistUrl);
-           var response = await storage.GetPlaylist(MainWindowViewModel.PlaylistUrl);
-           if (response.OperationStatus == OperationStatus.Success)
-           {
-               MainWindowViewModel.Songs = new ObservableCollection<Song>(response.Playlist.Songs);
-           }
-           else
-           {
-               MessageBox.Show("invalid url:"+ MainWindowViewModel.PlaylistUrl);
-            }
-        }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

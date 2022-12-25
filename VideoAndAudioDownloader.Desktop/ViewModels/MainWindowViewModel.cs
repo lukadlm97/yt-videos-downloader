@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Input;
+using ConsoleAppFramework;
+using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
+using VideoAndAudioDownloader.Desktop.Commands;
 using VideoAndAudioDownloader.Desktop.Models;
 using VideoAndAudioDownloader.Desktop.ViewModels.Common;
 
@@ -16,16 +18,14 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
     public class MainWindowViewModel:INotifyPropertyChanged
     {
+        private readonly IStorage storage;
         public MainWindowViewModel(IStorage storage)
         {
             this.storage = storage;
         }
-        public NavMenuSelectionStatus NavMenuSelectionStatus { get; set; }
         public string PlaylistUrl { get; set; }
-        public ICommand ButtonCommand { get; set; }
 
         public ObservableCollection<Song> songs;
-        private readonly IStorage storage;
 
    
         public ObservableCollection<Song> Songs
@@ -40,6 +40,88 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 OnPropertyChanged();
             }
         }
+        /*
+        private Visibility isLoading = Visibility.Hidden;
+
+        public Visibility IsLoading
+        {
+            get
+            {
+                return isLoading;
+            }
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+        */
+        private bool isErrorOccurred;
+
+        public bool IsErrorOccurred
+        {
+            get
+            {
+                return isErrorOccurred;
+            }
+            set
+            {
+                isErrorOccurred = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string errorDescription;
+        public string ErrorDescription
+        {
+            get
+            {
+                return errorDescription;
+            }
+            set
+            {
+                errorDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand loadPlaylistCommand;
+
+        public ICommand LoadPlaylistCommand
+        {
+            get
+            {
+                if (loadPlaylistCommand == null)
+                {
+                    loadPlaylistCommand = new RelayCommand(
+                        async param => await LoadAsync(PlaylistUrl),
+                        param => true);
+                }
+                return loadPlaylistCommand;
+            }
+        }
+      //  public bool CanLoad => !(isLoading==Visibility.Hidden);
+        
+        public async Task LoadAsync(string videoUrl)
+        {
+            //IsLoading = Visibility.Visible;
+            Songs= await GetItemsAsync(videoUrl);
+            //IsLoading = Visibility.Hidden;
+        }
+
+        async Task<ObservableCollection<Song>> GetItemsAsync(string videoUrl)
+        {
+            var playlistResponse = await storage.GetPlaylist(videoUrl);
+            if (playlistResponse.OperationStatus == OperationStatus.Success)
+            {
+                return new ObservableCollection<Song>(playlistResponse.Playlist.Songs);
+            }
+
+            isErrorOccurred = true;
+            errorDescription = playlistResponse.OperationStatus.ToString();
+            return new ObservableCollection<Song>();
+        }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

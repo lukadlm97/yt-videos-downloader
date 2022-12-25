@@ -9,11 +9,19 @@
 
   <ItemGroup>
     <None Remove="assets\icons\yt-icon.png" />
+    <None Remove="assets\main-window\loader.gif" />
+    <None Remove="assets\main-window\saveAsIcon.jpg" />
     <None Remove="assets\main-window\search.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="assets\icons\yt-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\main-window\loader.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\main-window\saveAsIcon.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="assets\main-window\search.png">
