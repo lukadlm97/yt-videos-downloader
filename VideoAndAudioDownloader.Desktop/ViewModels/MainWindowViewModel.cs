@@ -40,10 +40,10 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 OnPropertyChanged();
             }
         }
-        /*
-        private Visibility isLoading = Visibility.Hidden;
+        
+        private bool isLoading = false;
 
-        public Visibility IsLoading
+        public bool IsLoading
         {
             get
             {
@@ -55,7 +55,22 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 OnPropertyChanged();
             }
         }
-        */
+
+        private bool isSongsLoaded = false;
+
+        public bool IsSongsLoaded
+        {
+            get
+            {
+                return isSongsLoaded;
+            }
+            set
+            {
+                isSongsLoaded = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool isErrorOccurred;
 
         public bool IsErrorOccurred
@@ -105,7 +120,11 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
         public async Task LoadAsync(string videoUrl)
         {
             //IsLoading = Visibility.Visible;
+            IsLoading = true;
+            IsSongsLoaded = false;
             Songs= await GetItemsAsync(videoUrl);
+            IsLoading = false;
+            IsSongsLoaded = true;
             //IsLoading = Visibility.Hidden;
         }
 

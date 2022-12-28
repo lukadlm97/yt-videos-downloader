@@ -8,15 +8,15 @@
 
     <Grid MaxWidth="1000" Margin="10 10"  Background="Red">
         <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="125" />
-                <RowDefinition  Height="*"/>
-                <RowDefinition Height="125" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125" />
+            <RowDefinition  Height="*"/>
+            <RowDefinition Height="125" />
         </Grid.RowDefinitions>
-            <TextBox
+        <TextBox
                 Padding="10"
                     Background="CornflowerBlue"
                     Grid.Column="0"
@@ -45,24 +45,31 @@
                 <TextBlock Text="Search" VerticalAlignment="Center" />
             </StackPanel>
         </Button>
-          
-            <Grid Grid.Row="1" Grid.ColumnSpan="2"
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2"
                   Margin="10">
-            <ListView  Background="Bisque"
+            <Grid Visibility="{Binding IsSongsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ListView  Background="Bisque"
                            
                            FontSize="16"
                            Foreground="Red"
-                    ItemsSource="{Binding Songs}">
-                <ListView.View>
-                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Songs Information">
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Title}" Header="Title" Width="300"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Channel}" Header="Channel" Width="120"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Duration}" Header="Duration" Width="70"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" Header="Url" Width="220"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
+                           ItemsSource="{Binding Songs}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Songs Information">
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Title}" Header="Title" Width="300"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Channel}" Header="Channel" Width="120"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Duration}" Header="Duration" Width="70"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" Header="Url" Width="220"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+            <!-- The loading animation is shown when IsLoading is true, and hidden when it is false -->
+            <Grid  Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <!-- This could be a spinning GIF, a loading bar, or any other kind of loading animation -->
+                <Image Source="/assets/main-window/loader.gif" />
+            </Grid>
+           
         </Grid>
         <Grid Grid.Row="2" Grid.ColumnSpan="2"
                            Background="Bisque"
@@ -106,5 +113,7 @@
 
         </Grid>
     </Grid>
-       
+   
+
 </Window>
+

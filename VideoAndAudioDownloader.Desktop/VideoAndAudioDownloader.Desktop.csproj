@@ -37,4 +37,8 @@
     <ProjectReference Include="..\VideoAndAudioDownloader.BusinessLogic\VideoAndAudioDownloader.BusinessLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>
