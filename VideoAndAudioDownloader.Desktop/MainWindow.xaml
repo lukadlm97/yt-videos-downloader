@@ -92,11 +92,20 @@
                 Grid.Column="0"
                 Foreground="CornflowerBlue"
                 FontSize="22">Select destination:</TextBlock>
-            <TextBox  Foreground="White"
-                      Background="CornflowerBlue"
-                      Margin="10"
-                      Grid.Row="0"
-                      Grid.Column="1"></TextBox>
+            <Grid  Grid.Row="0"
+                   Grid.Column="1">
+                <TextBox  Foreground="White"
+                          Background="CornflowerBlue"
+                          Margin="10"
+                       />
+                <Button
+                    Width="100" Height="25" HorizontalAlignment="Right" 
+                    Background="White" Foreground="DodgerBlue"
+                    Margin="20 0 "
+                    Command="{Binding FindDestinationFolderCommand}" 
+                    Content="Find destination"/>
+            </Grid>
+      
             <Button
                 Background="CornflowerBlue"
                 Foreground="White"

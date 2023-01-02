@@ -12,6 +12,7 @@ using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.Desktop.Commands;
 using VideoAndAudioDownloader.Desktop.Models;
+using VideoAndAudioDownloader.Desktop.View;
 using VideoAndAudioDownloader.Desktop.ViewModels.Common;
 
 namespace VideoAndAudioDownloader.Desktop.ViewModels
@@ -115,8 +116,31 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 return loadPlaylistCommand;
             }
         }
+
+
+        private ICommand findDestinationFolderCommand;
+
+        public ICommand FindDestinationFolderCommand
+        {
+            get
+            {
+                if (findDestinationFolderCommand == null)
+                {
+                    findDestinationFolderCommand = new RelayCommand(
+                         param => OpenFindDestinationFolder(),
+                        param => true);
+                }
+                return findDestinationFolderCommand;
+            }
+        }
+
+        public void OpenFindDestinationFolder()
+        {
+            FindDestinationWindow findDestinationWindow = new FindDestinationWindow();
+            findDestinationWindow.ShowDialog();
+        }
       //  public bool CanLoad => !(isLoading==Visibility.Hidden);
-        
+
         public async Task LoadAsync(string videoUrl)
         {
             //IsLoading = Visibility.Visible;
