@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoAndAudioDownloader.Desktop.View"
         mc:Ignorable="d"
-        Title="Find Destination Folder Window" Height="250" Width="600">
-    <Grid>
-        
+        Title="Find Destination Folder Window" Height="250" Width="620">
+    <Grid MaxWidth="1000" Margin="10 10"  Background="Red">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
+            <RowDefinition  Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="10 10 10 0" >
+            <ListView  Background="Bisque"
+                       FontSize="16"
+                       Foreground="Red"
+                       ItemsSource="{Binding Songs}">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="true" 
+                              ColumnHeaderToolTip="Songs Information">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Duration}" 
+                                        Header="Folder Name" Width="220"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" 
+                                        Header="Path" Width="350"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="0 0 10 0 " Content="Add "/>
+            <Button Grid.Column="1" Margin="0 0 10 0 " Content="Delete"/>
+            <Button Grid.Column="2" Content="Done"/>
+        </Grid>
     </Grid>
 </Window>
