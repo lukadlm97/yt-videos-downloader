@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VideoAndAudioDownloader.Desktop.ViewModels
+﻿namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
     public class PersonViewModel
     {

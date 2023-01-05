@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VideoAndAudioDownloader.Desktop.ViewModels;
 
 namespace VideoAndAudioDownloader.Desktop.View
 {
@@ -19,9 +20,12 @@ namespace VideoAndAudioDownloader.Desktop.View
     /// </summary>
     public partial class FindDestinationWindow : Window
     {
+        private FindDestinationViewModel FindDestinationViewModel;
         public FindDestinationWindow()
         {
             InitializeComponent();
+            FindDestinationViewModel = new FindDestinationViewModel();
+            this.DataContext= FindDestinationViewModel;
         }
     }
 }

@@ -20,13 +20,13 @@
             <ListView  Background="Bisque"
                        FontSize="16"
                        Foreground="Red"
-                       ItemsSource="{Binding Songs}">
+                       ItemsSource="{Binding Destinations}">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true" 
-                              ColumnHeaderToolTip="Songs Information">
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Duration}" 
+                              ColumnHeaderToolTip="Path Information">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FolderName}" 
                                         Header="Folder Name" Width="220"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" 
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Path}" 
                                         Header="Path" Width="350"/>
                     </GridView>
                 </ListView.View>
@@ -38,7 +38,9 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="0 0 10 0 " Content="Add "/>
+            <Button Grid.Column="0" Margin="0 0 10 0 " 
+                    Content="Select Folder"
+                    Command="{Binding SelectFolderCommand}"/>
             <Button Grid.Column="1" Margin="0 0 10 0 " Content="Delete"/>
             <Button Grid.Column="2" Content="Done"/>
         </Grid>
