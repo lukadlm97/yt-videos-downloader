@@ -20,16 +20,18 @@
             <ListView  Background="Bisque"
                        FontSize="16"
                        Foreground="Red"
-                       ItemsSource="{Binding Destinations}">
+                       ItemsSource="{Binding Destinations}"
+                       SelectionMode="Multiple">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true" 
                               ColumnHeaderToolTip="Path Information">
                         <GridViewColumn DisplayMemberBinding="{Binding Path=FolderName}" 
-                                        Header="Folder Name" Width="220"/>
+                                        Header="Folder Name" Width="150"/>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Path}" 
-                                        Header="Path" Width="350"/>
+                                        Header="Path" Width="370"/>
                     </GridView>
                 </ListView.View>
+              
             </ListView>
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="3" Margin="10">
@@ -41,7 +43,8 @@
             <Button Grid.Column="0" Margin="0 0 10 0 " 
                     Content="Select Folder"
                     Command="{Binding SelectFolderCommand}"/>
-            <Button Grid.Column="1" Margin="0 0 10 0 " Content="Delete"/>
+            <Button Grid.Column="1" Margin="0 0 10 0 " Content="Delete" 
+                    Command="{Binding RemoveItemCommand}"/>
             <Button Grid.Column="2" Content="Done"/>
         </Grid>
     </Grid>

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Input;
@@ -20,8 +22,26 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             SelectFolderCommand = new RelayCommand(
                  param => SelectFolder(),
                 param => true);
+            RemoveItemCommand = new RelayCommand(param => RemoveItems(), param=>true);
             _destinations = new ObservableCollection<PhysicalPath>();
+            _selectedItems = new ObservableCollection<PhysicalPath>();
         }
+
+        private ObservableCollection<PhysicalPath> _selectedItems;
+
+        public ObservableCollection<PhysicalPath> SelectedItems
+        {
+            get
+            {
+                return _selectedItems;
+            }
+            set
+            {
+                _selectedItems=value;
+                OnPropertyChanged();
+            }
+        }
+
         private ObservableCollection<PhysicalPath> _destinations;
 
 
@@ -40,6 +60,7 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 
 
         public ICommand SelectFolderCommand { get; }
+        public ICommand RemoveItemCommand { get; }
 
         public string SelectedFolderPath
         {
@@ -61,9 +82,21 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 
                  Destinations.Add(new PhysicalPath()
                  {
-                     FolderName = folderName,
+                     FolderName = path.Substring(path.LastIndexOf('\\'),path.Length- path.LastIndexOf('\\')),
                      Path = path
                  });
+            }
+        }
+        private void RemoveItems()
+        {
+            if (SelectedItems == null)
+            {
+                return;
+            }
+
+            foreach (var item in SelectedItems.OfType<PhysicalPath>().ToList())
+            {
+                Destinations.Remove(item);
             }
         }
 
