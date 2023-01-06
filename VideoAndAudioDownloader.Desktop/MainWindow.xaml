@@ -91,19 +91,20 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Foreground="CornflowerBlue"
-                FontSize="22">Select destination:</TextBlock>
+                FontSize="22">Selected destinations:</TextBlock>
             <Grid  Grid.Row="0"
                    Grid.Column="1">
-                <TextBox  Foreground="White"
-                          Background="CornflowerBlue"
-                          Margin="10"
-                       />
+                <Label Content="{Binding Paths.Count}"   
+                       Foreground="CornflowerBlue"
+                       FontSize="22"
+                       Margin="0 5 200 0"/>
                 <Button
-                    Width="100" Height="25" HorizontalAlignment="Right" 
+                    Width="150" Height="30" HorizontalAlignment="Right" 
                     Background="White" Foreground="DodgerBlue"
                     Margin="20 0 "
+                    FontSize="18"
                     Command="{Binding FindDestinationFolderCommand}" 
-                    Content="Find destination"/>
+                    Content="Find destinations"/>
             </Grid>
       
             <Button

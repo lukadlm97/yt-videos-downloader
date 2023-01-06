@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
@@ -18,9 +21,24 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
         public MainWindowViewModel(IStorage storage)
         {
             this.storage = storage;
+            Paths = new List<PhysicalPath>();
         }
         public string PlaylistUrl { get; set; }
 
+        private IList<PhysicalPath> _paths;
+
+        public IList<PhysicalPath> Paths
+        {
+            get
+            {
+                return _paths;
+            }
+            set
+            {
+                _paths = value;
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<Song> songs;
 
    
@@ -131,8 +149,21 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 
         public void OpenFindDestinationFolder()
         {
-            FindDestinationWindow findDestinationWindow = new FindDestinationWindow();
+           Window findDestinationWindow = new Window()
+            {
+                Content = new FindDestinationWindow(),
+                Title = "Find destination folders",
+                DataContext = new FindDestinationViewModel()
+                {
+                    Destinations = new ObservableCollection<PhysicalPath>(Paths)
+                }
+            };
             findDestinationWindow.ShowDialog();
+
+            var findDestinationView = (FindDestinationWindow)findDestinationWindow.Content;
+            var findDestinationViewModel = (FindDestinationViewModel)findDestinationView.DataContext;
+
+            Paths = findDestinationViewModel.Destinations;
         }
       //  public bool CanLoad => !(isLoading==Visibility.Hidden);
 

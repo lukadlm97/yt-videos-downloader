@@ -18,17 +18,19 @@ namespace VideoAndAudioDownloader.Desktop.View
     /// <summary>
     /// Interaction logic for FindDestinationWindow.xaml
     /// </summary>
-    public partial class FindDestinationWindow : Window
+    public partial class FindDestinationWindow : UserControl
     {
-        private FindDestinationViewModel FindDestinationViewModel;
+       // private FindDestinationViewModel FindDestinationViewModel;
         public FindDestinationWindow()
         {
             InitializeComponent();
-            FindDestinationViewModel = new FindDestinationViewModel();
-            this.DataContext= FindDestinationViewModel;
+           // FindDestinationViewModel = new FindDestinationViewModel();
+           // this.DataContext= FindDestinationViewModel;
         }
-        
 
-
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(sender as DependencyObject).DialogResult = true;
+        }
     }
 }

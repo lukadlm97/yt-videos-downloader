@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Windows;
 using System.Windows.Input;
 using VideoAndAudioDownloader.Desktop.Commands;
 using System.Windows.Forms;
@@ -22,22 +23,24 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             SelectFolderCommand = new RelayCommand(
                  param => SelectFolder(),
                 param => true);
-            RemoveItemCommand = new RelayCommand(param => RemoveItems(), param=>true);
+            RemoveItemCommand = new RelayCommand(param => RemoveItem(),
+                param=>true);
+         
             _destinations = new ObservableCollection<PhysicalPath>();
-            _selectedItems = new ObservableCollection<PhysicalPath>();
+            _selectedItem =null;
         }
 
-        private ObservableCollection<PhysicalPath> _selectedItems;
+        private PhysicalPath _selectedItem;
 
-        public ObservableCollection<PhysicalPath> SelectedItems
+        public PhysicalPath SelectedItem
         {
             get
             {
-                return _selectedItems;
+                return _selectedItem;
             }
             set
             {
-                _selectedItems=value;
+                _selectedItem = value;
                 OnPropertyChanged();
             }
         }
@@ -87,18 +90,17 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                  });
             }
         }
-        private void RemoveItems()
+        private void RemoveItem()
         {
-            if (SelectedItems == null)
+            if (SelectedItem == null)
             {
                 return;
             }
 
-            foreach (var item in SelectedItems.OfType<PhysicalPath>().ToList())
-            {
-                Destinations.Remove(item);
-            }
+            Destinations.Remove(SelectedItem);
         }
+
+      
 
         public event PropertyChangedEventHandler PropertyChanged;
 
