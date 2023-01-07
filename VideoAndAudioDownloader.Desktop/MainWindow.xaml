@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Icon="assets/icons/yt-icon.png"
-        Title="You Tube Downloader" Height="450" Width="800">
+        Title="You Tube Downloader" Height="470" Width="800">
 
     <Grid MaxWidth="1000" Margin="10 10"  Background="Red">
         <Grid.ColumnDefinitions>
@@ -12,45 +12,65 @@
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="125" />
+            <RowDefinition Height="80" />
             <RowDefinition  Height="*"/>
-            <RowDefinition Height="125" />
+            <RowDefinition Height="110" />
         </Grid.RowDefinitions>
-        <TextBox
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" 
+              >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="125" />
+            </Grid.RowDefinitions>
+            <TextBox
                 Padding="10"
-                    Background="CornflowerBlue"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Margin="10"
-                    FontSize="16"
-                    Foreground="White"
-                    Text="{Binding PlaylistUrl,Mode=TwoWay}"
-                    Name="tbMultiLine"
-                    TextWrapping="Wrap"
-                    AcceptsReturn="True"
-                    VerticalScrollBarVisibility="Visible"
+                Background="CornflowerBlue"
+                Grid.Column="0"
+                Grid.Row="0"
+                Margin="10"
+                FontSize="16"
+                Foreground="White"
+                Text="{Binding PlaylistUrl,Mode=TwoWay}"
+                Name="tbMultiLine"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                VerticalScrollBarVisibility="Visible"
                     
-                />
-        <Button
+            />
+            <Button
                 Background="CornflowerBlue"
                 Foreground="White"
-                    Grid.Column="1"
-                    Grid.Row="0"
-                    Margin="10 "
-                   FontSize="16"
-                    Command="{Binding LoadPlaylistCommand}">
-            <StackPanel  Orientation="Horizontal">
+                Grid.Column="1"
+                Grid.Row="0"
+                Margin="10 "
+                FontSize="16"
+                Command="{Binding LoadPlaylistCommand}">
+                <StackPanel  Orientation="Horizontal">
 
-                <Image Source="assets/main-window/search.png" Width="40" Height="16"/>
-                <TextBlock Text="Search" VerticalAlignment="Center" />
-            </StackPanel>
-        </Button>
+                    <Image Source="assets/main-window/search.png" Width="40" Height="16"/>
+                    <TextBlock Text="Search" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </Grid>
+   
 
         <Grid Grid.Row="1" Grid.ColumnSpan="2"
+              IsEnabled="{Binding IsSongsLoaded}"
                   Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150" />
+                <RowDefinition Height="75" />
+            </Grid.RowDefinitions>
             <Grid Visibility="{Binding IsSongsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ListView  Background="Bisque"
-                           
+                           SelectedItem="{Binding SelectedSong}"
+                           SelectionMode="Single"
                            FontSize="16"
                            Foreground="Red"
                            ItemsSource="{Binding Songs}">
@@ -69,7 +89,24 @@
                 <!-- This could be a spinning GIF, a loading bar, or any other kind of loading animation -->
                 <Image Source="/assets/main-window/loader.gif" />
             </Grid>
-           
+           <Grid Grid.Row="1" Margin="0 10">
+               <Button
+                   Background="White"
+                   Foreground="Red"
+                   Grid.Column="3"
+                   Grid.Row="0"
+                   Width="200"
+                   HorizontalAlignment="Right"
+                   Margin="0 10"
+                   FontSize="16"
+                   Command="{Binding RemoveSongFromListCommand}">
+                   <StackPanel  Orientation="Horizontal">
+                       <Image Source="assets/main-window/recycle-bin.png" 
+                              Width="40" Height="16"/>
+                       <TextBlock Text="Remove" VerticalAlignment="Center" />
+                   </StackPanel>
+               </Button>
+            </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.ColumnSpan="2"
                            Background="Bisque"
@@ -104,7 +141,7 @@
                     Margin="20 0 "
                     FontSize="18"
                     Command="{Binding FindDestinationFolderCommand}" 
-                    Content="Find destinations"/>
+                    Content="Find destinations" />
             </Grid>
       
             <Button

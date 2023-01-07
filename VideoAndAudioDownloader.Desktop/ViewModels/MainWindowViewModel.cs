@@ -24,6 +24,20 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             Paths = new List<PhysicalPath>();
         }
         public string PlaylistUrl { get; set; }
+        private Song _selectedSong { get; set; }
+
+        public Song SelectedSong
+        {
+            get
+            {
+                return _selectedSong;
+            }
+            set
+            {
+                _selectedSong = value;
+                OnPropertyChanged();
+            }
+        }
 
         private IList<PhysicalPath> _paths;
 
@@ -130,6 +144,10 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             }
         }
 
+        public bool InvertedIsSongLoaded
+        {
+            get { return !IsSongsLoaded; }
+        }
 
         private ICommand findDestinationFolderCommand;
 
@@ -144,6 +162,32 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                         param => true);
                 }
                 return findDestinationFolderCommand;
+            }
+        }
+
+        private ICommand _removeSongFromListCommand;
+
+        public ICommand RemoveSongFromListCommand
+        {
+            get
+            {
+                if (_removeSongFromListCommand == null)
+                {
+               
+                        _removeSongFromListCommand = new RelayCommand(
+                            param => RemoveSongFromList(),
+                            param => true);
+                }
+
+                return _removeSongFromListCommand;
+            }
+        }
+
+        public void RemoveSongFromList()
+        {
+            if (Songs.Contains(SelectedSong))
+            {
+                Songs.Remove(SelectedSong);
             }
         }
 

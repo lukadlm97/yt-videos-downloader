@@ -45,5 +45,6 @@ namespace VideoAndAudioDownloader.Desktop
             OnPropertyChanged(propertyName);
             return true;
         }
+        
     }
 }
