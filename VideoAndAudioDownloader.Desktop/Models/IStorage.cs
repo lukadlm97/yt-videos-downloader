@@ -12,6 +12,7 @@ namespace VideoAndAudioDownloader.Desktop.Models
         Task<IEnumerable<Person>> GetAllPersons();
         Task<Person> GetPersonById(int id);
         Task<PlaylistResponse> GetPlaylist(string videoUrl);
+        Task<SongResponse> GetSong(string videoUrl);
 
     }
 }

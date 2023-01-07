@@ -57,5 +57,10 @@ namespace VideoAndAudioDownloader.Desktop.Models
         {
             return await youTubeDownloader.GetPlaylistSongs(videoUrl);
         }
+
+        public async Task<SongResponse> GetSong(string videoUrl)
+        {
+            return await youTubeDownloader.GetSingleSong(videoUrl);
+        }
     }
 }

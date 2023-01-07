@@ -1,8 +1,8 @@
 ﻿using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.BusinessLogic.Models.DTO;
-using YoutubeExplode;
 using YoutubeExplode.Common;
+using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos.Streams;
 
 namespace VideoAndAudioDownloader.BusinessLogic.Services
@@ -102,9 +102,9 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
                     return response;
                 }
 
-                var realPlaylist = new Playlist()
+                var realPlaylist = new Models.Playlist()
                 {
-                    Name = playlist.Title,
+                     Name= playlist.Title,
                 };
                 var realSongs = new List<Song>();
                 // Get all playlist videos
@@ -133,6 +133,42 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
 
             return response;
 
+        }
+
+        public async Task<SongResponse> GetSingleSong(string videoUrl, CancellationToken cancellationToken = default)
+        {
+            var response = new SongResponse()
+            {
+                OperationStatus = OperationStatus.Success
+            };
+            try
+            {
+                var youtube = YouTubeClientFactory.CreateYoutubeClient();
+
+                var video = await youtube.Videos.GetAsync(videoUrl, cancellationToken);
+                if (video is null)
+                {
+                    response.OperationStatus = OperationStatus.NotFound;
+                    return response;
+                }
+
+                var song = new Song()
+                {
+                    Title = video.Title,
+                    Channel = video.Author.ChannelTitle,
+                    Duration = video.Duration.ToString(),
+                    Url = video.Url
+                };
+
+                response.Song = song;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.OperationStatus = OperationStatus.BadRequest;
+            }
+
+            return response;
         }
     }
 }

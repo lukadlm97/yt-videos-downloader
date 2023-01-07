@@ -214,13 +214,33 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             {
                 Content = new AddNewSongUserControl(),
                 Title = "Add new song to playlist",
-                DataContext = new AddNewSongViewModel()
+                DataContext = new AddNewSongViewModel(storage)
                 {
                     SearchUrl = "copy there url of source"
                 }
             };
             addNewSongWindow.ShowDialog();
+            if (addNewSongWindow.DialogResult is null)
+            {
+                return;
+            }
 
+            if (addNewSongWindow.DialogResult is false)
+            {
+                return;
+            }
+            var addNewSongView = (AddNewSongUserControl)addNewSongWindow.Content;
+            var addNewSongViewModel = (AddNewSongViewModel)addNewSongView.DataContext;
+            
+            if (addNewSongViewModel.IsPlaylistLoaded)
+            {
+                foreach (var song in addNewSongViewModel.Playlist.Songs)
+                {
+                    Songs.Add(song);
+                }
+                return;
+            }
+            Songs.Add(addNewSongViewModel.Song);
         }
         public void OpenFindDestinationFolder()
         {

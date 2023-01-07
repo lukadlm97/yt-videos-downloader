@@ -57,6 +57,11 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
+        public Task<SongResponse> GetSingleSong(string videoUrl, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
         {

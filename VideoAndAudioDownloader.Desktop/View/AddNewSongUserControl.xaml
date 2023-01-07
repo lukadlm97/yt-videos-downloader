@@ -34,7 +34,8 @@
             <Button Grid.Column="2"
                     Background="CornflowerBlue"
                     Foreground="White"
-                    FontSize="18">
+                    FontSize="18"
+                    Command="{Binding SearchUrlCommand}">
                 <StackPanel  Orientation="Horizontal">
                     <Image Source="../assets/main-window/search.png" 
                            Width="40" Height="16"/>
