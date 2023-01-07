@@ -182,6 +182,23 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 return _removeSongFromListCommand;
             }
         }
+        private ICommand _openAddNewSongCommand;
+
+        public ICommand OpenAddNewSongCommand
+        {
+            get
+            {
+                if (_openAddNewSongCommand == null)
+                {
+
+                    _openAddNewSongCommand = new RelayCommand(
+                        param => OpenAddNewSongWindow(),
+                        param => true);
+                }
+
+                return _openAddNewSongCommand;
+            }
+        }
 
         public void RemoveSongFromList()
         {
@@ -191,6 +208,20 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             }
         }
 
+        public void OpenAddNewSongWindow()
+        {
+            Window addNewSongWindow = new Window()
+            {
+                Content = new AddNewSongUserControl(),
+                Title = "Add new song to playlist",
+                DataContext = new AddNewSongViewModel()
+                {
+                    SearchUrl = "copy there url of source"
+                }
+            };
+            addNewSongWindow.ShowDialog();
+
+        }
         public void OpenFindDestinationFolder()
         {
            Window findDestinationWindow = new Window()
