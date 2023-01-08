@@ -9,3 +9,29 @@ VideoAndAudioDownloader.ConsoleApp is a self-hosted console application that uti
 
 ## VideoAndAudioDownloader.Desktop
 This is a desktop app built with WPF and .NET 7. It follows the MVVM design pattern and has three main windows. The first window allows you to import a YouTube playlist and perform a search to return all of the songs/videos in the playlist. You can also remove certain items from the playlist. The second window allows you to add more playlist and songs using a helper user control. Finally, the third window allows you to select one or more folders as destinations where all of the songs from the playlist will be saved to the file system.
+
+## Desktop app demo
+### Start screen:
+<img width="591" alt="start-screen" src="https://user-images.githubusercontent.com/36825550/211218113-6e9fecb6-f45b-43be-8eb3-a10433f5dfce.png">
+
+### Simple use case:
+<img width="587" alt="simple-use-case" src="https://user-images.githubusercontent.com/36825550/211218133-09fbe23f-1e45-461a-b4c6-8534eff271f9.png">
+
+### Add new song to playlist:
+<img width="627" alt="add-new-song" src="https://user-images.githubusercontent.com/36825550/211218141-9e100881-f9ab-457e-90f4-aede34da2962.png">
+
+### Select destinations:
+<img width="473" alt="select-destinations" src="https://user-images.githubusercontent.com/36825550/211218152-3b956c60-ac2c-4722-a585-72125f75d7f3.png">
+
+### Another pop-up for selecting exact folder path:
+<img width="473" alt="select-single-destination" src="https://user-images.githubusercontent.com/36825550/211218178-57578aa4-9c0b-4c41-998e-0f98e97c2f0a.png">
+
+### Example of downloaded videos:
+<img width="394" alt="example-of-downloaded-videos" src="https://user-images.githubusercontent.com/36825550/211218216-4ee32a51-9b23-4e81-98da-ae2d64232613.png">
+
+### Example of donwloaded audios:
+<img width="390" alt="audio-example" src="https://user-images.githubusercontent.com/36825550/211218238-7b680a92-0007-4565-b4b1-a97615b53f04.png">
+
+
+
+
