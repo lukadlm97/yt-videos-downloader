@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using ConsoleAppFramework;
 using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.Desktop.Commands;
@@ -22,11 +12,36 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
     public class AddNewSongViewModel:INotifyPropertyChanged
     {
-        public AddNewSongViewModel(IStorage storage)
+        public AddNewSongViewModel(IYouTubeService storage)
         {
             this._storage = storage;
         }
 
+        private bool _isLoaded=false;
+
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            set
+            {
+                _isLoaded = value;
+                OnPropertyChanged();
+            }
+        
+        }
+
+        private bool _invertedIsLoaded = true;
+
+        public bool InvertedIsLoaded
+        {
+            get { return _invertedIsLoaded; }
+            set
+            {
+                _invertedIsLoaded = value;
+                OnPropertyChanged();
+            }
+
+        }
         private ICommand _searchUrlCommand;
 
         public ICommand SearchUrlCommand
@@ -49,37 +64,27 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             if (songResponse.OperationStatus == OperationStatus.Success)
             {
                 Song=songResponse.Song;
-                IsPlaylistLoaded = false;
+                IsPlaylistLoaded = false; IsLoaded = true;
+                InvertedIsLoaded = false;
                 return;
             }
 
             var playlistResponse = await _storage.GetPlaylist(_searchUrl);
             if (playlistResponse.OperationStatus == OperationStatus.Success)
             {
-                IsPlaylistLoaded = true;
-                Playlist=playlistResponse.Playlist;
+                IsPlaylistLoaded = true; IsLoaded = true;
+                InvertedIsLoaded = false;
+                Playlist =playlistResponse.Playlist;
                 return;
             }
 
-            OperationDescription = $"Search for {_searchUrl} was finished with error. Check url please, at your browser!";
+            OperationDescription = $"Search for {_searchUrl} was finished with error.\nCheck url please, at your browser!";
+            IsLoaded = true;
+            InvertedIsLoaded = false;
             return;
             
         }
-        private BitmapFrame _bfWindowIcon;
-
-        public BitmapFrame BfWindowIcon
-        {
-            get
-            {
-                return _bfWindowIcon;
-            }
-            set
-            {
-                _bfWindowIcon = value;
-                OnPropertyChanged(nameof(BfWindowIcon));
-            }
-        }
-       
+    
 
         private string _searchUrl;
 
@@ -108,7 +113,7 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             {
                 _playlist = value;
                 OnPropertyChanged();
-                OperationDescription = $"Playlist fetched :{_playlist.Name} is founded. Do you want to add all songs to playlist?";
+                OperationDescription = $"Playlist fetched :{_playlist.Name} is founded.\nDo you want to add all songs to playlist?";
             }
         }
         private Song _song;
@@ -123,11 +128,11 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             {
                 _song=value;
                 OnPropertyChanged();
-                OperationDescription = $"Song:{_song.Title} is founded. Do you want to add her to playlist?";
+                OperationDescription = $"Song:{_song.Title} is founded.\nDo you want to add her to playlist?";
             }
         }
 
-        private readonly IStorage _storage;
+        private readonly IYouTubeService _storage;
         private bool _isPlaylistLoaded;
 
         public bool IsPlaylistLoaded
@@ -155,7 +160,30 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 _operationsDescription = value;
                 OnPropertyChanged();
             }
-        } 
+        }
+
+        private ICommand _updateSearchCommand;
+
+        public ICommand UpdateSearchCommand
+        {
+            get
+            {
+                if (_updateSearchCommand == null)
+                {
+                    _updateSearchCommand = new RelayCommand(
+                        param => UpdateSearch(),
+                        param => true);
+                }
+
+                return _updateSearchCommand;
+            }
+        }
+
+        private void UpdateSearch()
+        {
+            IsLoaded = false;
+            InvertedIsLoaded = true;
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -42,11 +42,20 @@
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Margin="0 0 10 0 " 
-                    Content="Select Folder"
+                    Content="+ Select Folder"
+                    Background="CornflowerBlue"
+                    Foreground="White"
+                    FontSize="18"
                     Command="{Binding SelectFolderCommand}"/>
-            <Button Grid.Column="1" Margin="0 0 10 0 " Content="Delete" 
+            <Button Grid.Column="1" Margin="0 0 10 0 " Content="- Remove folder" 
+                    Background="IndianRed"
+                    Foreground="White"
+                    FontSize="18"
                     Command="{Binding RemoveItemCommand}"/>
             <Button Grid.Column="2" Content="Done" Click="Button_Click"
+                    Background="DarkOliveGreen"
+                    Foreground="White"
+                    FontSize="18"
                     />
         </Grid>
     </Grid>

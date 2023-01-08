@@ -1,9 +1,9 @@
-﻿
-namespace VideoAndAudioDownloader.BusinessLogic.Models.DTO
+﻿using VideoAndAudioDownloader.BusinessLogic.Enumerations;
+
+namespace VideoAndAudioDownloader.BusinessLogic.Models.DTO;
+
+public class PlaylistResponse
 {
-    public class PlaylistResponse
-    {
-        public Enumerations.OperationStatus OperationStatus { get; set; }
-        public Playlist Playlist { get; set;}
-    }
+    public OperationStatus OperationStatus { get; set; }
+    public Playlist Playlist { get; set; }
 }

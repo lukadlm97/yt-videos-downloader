@@ -22,7 +22,7 @@ namespace VideoAndAudioDownloader.Desktop
     {
         private MainWindowViewModel MainWindowViewModel;
 
-        public MainWindow(IStorage storage)
+        public MainWindow(IYouTubeService storage)
         {
             InitializeComponent();
             MainWindowViewModel = new MainWindowViewModel(storage);

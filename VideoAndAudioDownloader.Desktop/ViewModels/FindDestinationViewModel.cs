@@ -11,6 +11,7 @@ using System.Windows.Input;
 using VideoAndAudioDownloader.Desktop.Commands;
 using System.Windows.Forms;
 using VideoAndAudioDownloader.Desktop.Models;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
@@ -94,6 +95,7 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
         {
             if (SelectedItem == null)
             {
+                MessageBox.Show("Not selected item for removal", "Error occurred");
                 return;
             }
 

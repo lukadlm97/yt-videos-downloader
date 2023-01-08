@@ -20,8 +20,8 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
     public class MainWindowViewModel:INotifyPropertyChanged
     {
-        private readonly IStorage storage;
-        public MainWindowViewModel(IStorage storage)
+        private readonly IYouTubeService storage;
+        public MainWindowViewModel(IYouTubeService storage)
         {
             this.storage = storage;
             Paths = new List<PhysicalPath>();
@@ -161,9 +161,64 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             }
         }
 
+        private bool _isNewFolderSelected;
+
+        public bool IsNewFolderSelected
+        {
+            get
+            {
+                return _isNewFolderSelected;
+            }
+            set
+            {
+                _isNewFolderSelected= value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _isVideoSelected;
+
+        public bool IsVideoSelected
+        {
+            get
+            {
+                return _isVideoSelected;
+            }
+            set
+            {
+                _isVideoSelected = value;
+                OnPropertyChanged();
+            }
+        }
+        
+
+        private string _folderName="folder-name";
+
+        public string FolderName
+        {
+            get
+            {
+                return _folderName;
+            }
+            set
+            {
+                _folderName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _invertedIsSongLoaded = true;
+
         public bool InvertedIsSongLoaded
         {
-            get { return !IsSongsLoaded; }
+            get
+            {
+                return _invertedIsSongLoaded;
+            }
+            set
+            {
+                _invertedIsSongLoaded = value;
+                OnPropertyChanged();
+            }
         }
 
         private ICommand findDestinationFolderCommand;
@@ -180,6 +235,28 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 }
                 return findDestinationFolderCommand;
             }
+        }
+
+        private ICommand _updateSearchCommand;
+
+        public ICommand UpdateSearchCommand
+        {
+            get
+            {
+                if (_updateSearchCommand == null)
+                {
+                    _updateSearchCommand = new RelayCommand(
+                        param => UpdateSearch(),
+                        param => true);
+                }
+                return _updateSearchCommand;
+            }
+        }
+
+        private void UpdateSearch()
+        {
+            IsSongsLoaded = false;
+            InvertedIsSongLoaded = true;
         }
 
         private ICommand _removeSongFromListCommand;
@@ -216,7 +293,23 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 return _openAddNewSongCommand;
             }
         }
+        private ICommand _returnOnPlaylistTweaking;
 
+        public ICommand ReturnOnPlaylistTweaking
+        {
+            get
+            {
+                if (_returnOnPlaylistTweaking == null)
+                {
+
+                    _returnOnPlaylistTweaking = new RelayCommand(
+                        param => ReturnOnPlaylist(),
+                        param => true);
+                }
+
+                return _returnOnPlaylistTweaking;
+            }
+        }
         private ICommand _saveSelectedVideosToDestinationFolderCommand;
 
         public ICommand SaveSelectedVideosToDestinationFolderCommand
@@ -236,22 +329,48 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 
         public async Task DownloadAndSave()
         {
-            var response = await storage.DownloadAndSave(Songs.Select(x => x.Url), Paths.Select(x => x.Path));
+            FullWindowOperationOccurred = false;
+            var paths = Paths.Select(x => x.Path);
+            if (IsNewFolderSelected)
+            {
+                paths = paths.Select(x => x + "\\" + FolderName);
+            }
+            var response = await storage.DownloadAndSave(Songs.Select(x => x.Url),
+                paths,IsVideoSelected?MediaType.Video:MediaType.Audio);
             if (response.OperationStatus == OperationStatus.Success)
             {
-                MessageBox.Show("Download and save to destination system has successfully finished!!!");
+
+                MessageBox.Show( "Download and save to destination system has successfully finished!!!", "Error occurred");
                 ReinizializationOfView();
+                FullWindowOperationOccurred = true;
                 return;
             }
 
             if (response.OperationStatus == OperationStatus.MissingParts)
             {
-                MessageBox.Show("Some of videos or destination folders are not available now.");
+                MessageBox.Show("Some of videos or destination folders are not available now.", "Error occurred");
+                FullWindowOperationOccurred = true; 
                 return;
             }
 
-            MessageBox.Show("Some network error occurred.");
-            
+            MessageBox.Show( "Some network error occurred.", "Error occurred");
+            FullWindowOperationOccurred = true;
+
+        }
+
+        private bool _fullWindowOperationOccurred = true;
+
+        public bool FullWindowOperationOccurred
+        {
+            get
+            {
+                return _fullWindowOperationOccurred;
+            }
+            set
+            {
+                _fullWindowOperationOccurred= value;
+                OnPropertyChanged();
+            }
         }
 
         private void ReinizializationOfView()
@@ -260,6 +379,8 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             Paths = new List<PhysicalPath>();
             SelectedSong = null;
             SearchPlaylistUrl=string.Empty;
+            IsNewFolderSelected = false;
+            IsVideoSelected=false;
         }
 
         public void RemoveSongFromList()
@@ -267,7 +388,10 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             if (Songs.Contains(SelectedSong))
             {
                 Songs.Remove(SelectedSong);
+                return;
             }
+
+            MessageBox.Show("Not selected any song from list!", "Error occurred");
         }
 
         public void OpenAddNewSongWindow()
@@ -281,7 +405,8 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 Content = new AddNewSongUserControl(),
                 Title = "Add new song to playlist",
                 DataContext = rawAddNewSongViewModel,
-                Icon = rawAddNewSongViewModel.BfWindowIcon
+                Width = 850,
+                Height = 500
                 };
             addNewSongWindow.ShowDialog();
             if (addNewSongWindow.DialogResult is null)
@@ -310,6 +435,8 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
         {
            Window findDestinationWindow = new Window()
             {
+                Width = 650,
+                Height = 400,
                 Content = new FindDestinationWindow(),
                 Title = "Find destination folders",
                 DataContext = new FindDestinationViewModel()
@@ -334,7 +461,14 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             Songs= await GetItemsAsync(videoUrl);
             IsLoading = false;
             IsSongsLoaded = true;
+            InvertedIsSongLoaded = false;
             //IsLoading = Visibility.Hidden;
+        }
+
+        private void ReturnOnPlaylist()
+        {
+            IsSongsLoaded = true;
+            InvertedIsSongLoaded = false;
         }
 
         async Task<ObservableCollection<Song>> GetItemsAsync(string videoUrl)
@@ -345,8 +479,7 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 return new ObservableCollection<Song>(playlistResponse.Playlist.Songs);
             }
 
-            isErrorOccurred = true;
-            errorDescription = playlistResponse.OperationStatus.ToString();
+            MessageBox.Show("Playlist is not loaded.Reasons: "+ playlistResponse.OperationStatus.ToString(), "Error occurred");
             return new ObservableCollection<Song>();
         }
 

@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Icon="assets/icons/yt-icon.png"
-        Title="You Tube Downloader" Height="520" Width="800">
+        Title="You Tube Downloader" Height="570" Width="800">
 
-    <Grid MaxWidth="1000" Margin="10 10"  Background="Red">
+    <Grid MaxWidth="1000" Margin="10 10"  Background="Red"
+          IsEnabled="{Binding FullWindowOperationOccurred}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="300" />
@@ -14,24 +15,27 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition  Height="*"/>
-            <RowDefinition Height="110" />
+            <RowDefinition Height="160" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.ColumnSpan="2" 
               Margin="10"
+              IsEnabled="{Binding InvertedIsSongLoaded}"
               >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
-           
-                <TextBox
+
+            <TextBox
                 Padding="10"
                 Background="CornflowerBlue"
                 Grid.Column="0"
                 Grid.Row="0"
+                Grid.RowSpan="2"
                 FontSize="16"
                 Foreground="White"
                 Text="{Binding SearchPlaylistUrl,Mode=TwoWay}"
@@ -45,7 +49,7 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 FontSize="16"
-                Margin="10 0 0 0"
+                Margin="10 0 0 10"
                 Command="{Binding LoadPlaylistCommand}">
                 <StackPanel  Orientation="Horizontal">
                     <Image Source="assets/main-window/search.png" 
@@ -53,8 +57,17 @@
                     <TextBlock Text="Search" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
+            <Button
+                    Background="Coral"
+                    Foreground="White"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    FontSize="16"
+                    Margin="10 10 0 0"
+                    Content="Return to playlist"
+                    Command="{Binding ReturnOnPlaylistTweaking}"/>
         </Grid>
-   
+
 
         <Grid Grid.Row="1" Grid.ColumnSpan="2"
               IsEnabled="{Binding IsSongsLoaded}"
@@ -66,7 +79,8 @@
                 <RowDefinition Height="150" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            <Grid Visibility="{Binding IsSongsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid 
+                Visibility="{Binding IsSongsLoaded,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ListView  Background="Bisque"
                            SelectedItem="{Binding SelectedSong}"
                            SelectionMode="Single"
@@ -88,45 +102,46 @@
                 <!-- This could be a spinning GIF, a loading bar, or any other kind of loading animation -->
                 <Image Source="/assets/main-window/loader.gif" />
             </Grid>
-           <Grid Grid.Row="1" Margin="0 10">
-               <Grid.RowDefinitions>
-                   <RowDefinition />
+            <Grid Grid.Row="1" Margin="0 10">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-               <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="250"/>
                 </Grid.ColumnDefinitions>
-               <Button
-                   Background="White"
-                   Foreground="GreenYellow"
+                <Button
+                   Background="DarkOliveGreen"
+                   Foreground="White"
                    Grid.Column="0"
                    Grid.Row="0"
-                   FontSize="16"
+                   FontSize="18"
+                   Content="+ Add another playlist or song"
                    Command="{Binding OpenAddNewSongCommand}">
-                   <StackPanel  Orientation="Horizontal">
-                       <Image Source="assets/main-window/recycle-bin.png" 
-                              Width="40" Height="16"/>
-                       <TextBlock Text="Add Another Song" VerticalAlignment="Center" />
-                   </StackPanel>
                 </Button>
-               <Button
-                   Background="White"
-                   Foreground="Red"
+                <Button
+                   Background="CornflowerBlue"
+                   Foreground="White"
+                   Grid.Column="2"
+                   Grid.Row="0"
+                   FontSize="18"
+                   Content="Update search"
+                   Command="{Binding UpdateSearchCommand}">
+                </Button>
+                <Button
+                   Background="IndianRed"
+                   Foreground="White"
                    Grid.Column="5"
                    Grid.Row="0"
-                   Width="200"
+                   Width="250"
                    HorizontalAlignment="Right"
-                   FontSize="16"
+                   FontSize="19"
+                   Content="- Remove song from list"
                    Command="{Binding RemoveSongFromListCommand}">
-                   <StackPanel  Orientation="Horizontal">
-                       <Image Source="assets/main-window/recycle-bin.png" 
-                              Width="40" Height="16"/>
-                       <TextBlock Text="Remove" VerticalAlignment="Center" />
-                   </StackPanel>
-               </Button>
+                </Button>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.ColumnSpan="2"
@@ -140,49 +155,104 @@
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"  />
-                <RowDefinition  Height="50"/>
-                <RowDefinition Height="20" />
+                <RowDefinition Height="40"  />
+                <RowDefinition  Height="40"/>
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
-            <TextBlock 
-                Margin="10"
-                Grid.Row="0"
-                Grid.Column="0"
-                Foreground="CornflowerBlue"
-                FontSize="22">Selected destinations:</TextBlock>
-            <Grid  Grid.Row="0"
-                   Grid.Column="1">
-                <Label Content="{Binding Paths.Count}"   
-                       Foreground="CornflowerBlue"
-                       FontSize="22"
-                       Margin="0 5 200 0"/>
-                <Button
-                    Width="150" Height="30" HorizontalAlignment="Right" 
-                    Background="White" Foreground="DodgerBlue"
-                    Margin="20 0 "
-                    FontSize="18"
-                    Command="{Binding FindDestinationFolderCommand}" 
-                    Content="Find destinations" />
+            <Grid Grid.Row="0" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Column="0"
+                          Margin="20 10 0 0"
+                          Content="create new folder"
+                          Foreground="CornflowerBlue"
+                          VerticalContentAlignment="Center"
+                          IsChecked="{Binding IsNewFolderSelected}"
+                          FontSize="18">
+                </CheckBox>
+                <TextBox Grid.Column="1"
+                         Margin="5"
+                         FontSize="18"
+                         Background="CornflowerBlue"
+                         Foreground="White"
+                         VerticalAlignment="Center"
+                         IsEnabled="{Binding IsNewFolderSelected}"
+                         Text="{Binding FolderName,Mode=TwoWay}"
+                />
             </Grid>
-      
-            <Button
-                Background="CornflowerBlue"
-                Foreground="White"
-                Grid.Column="3"
-                Grid.Row="0"
-                Margin="10 "
-                Command="{Binding SaveSelectedVideosToDestinationFolderCommand}"
-                FontSize="16">
-                <StackPanel  Orientation="Horizontal">
+            <Grid Grid.Row="1" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="68.5" />
+                    <ColumnDefinition Width="131.5"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Column="0"
+                          Margin="20 10 0 0"
+                          Content="download video file"
+                          Foreground="CornflowerBlue"
+                          VerticalContentAlignment="Center"
+                          IsChecked="{Binding IsVideoSelected}"
+                          FontSize="18">
+                </CheckBox>
+            
+            </Grid>
+            <Grid Grid.Row="2" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock 
+                    Margin="20 0 0 0"
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Foreground="CornflowerBlue"
+                    FontSize="18">Selected destinations:
+                </TextBlock>
 
-                    <Image Source="assets/main-window/saveAsIcon.jpg" Width="40" Height="16"/>
-                    <TextBlock Text="Save" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
+                <Label  Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Content="{Binding Paths.Count}" 
+                        Foreground="CornflowerBlue"
+                        FontSize="18"/>
+                <Button Grid.Column="2"
+                        Margin="50 0 0 0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Background="White" Foreground="DodgerBlue"
+                        FontSize="18"
+                        Width="150"
+                        Command="{Binding FindDestinationFolderCommand}" 
+                        Content="Find destinations" />
+
+
+                <Button
+                    Margin="0 0 0 0"
+                    Background="CornflowerBlue"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Grid.Column="4"
+                    Width="150"
+                    Command="{Binding SaveSelectedVideosToDestinationFolderCommand}"
+                    FontSize="18">
+                    <StackPanel  Orientation="Horizontal">
+
+                        <Image Source="assets/main-window/saveAsIcon.jpg" Width="40" Height="16"/>
+                        <TextBlock Text="Save" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+            </Grid>
 
         </Grid>
     </Grid>
-   
+
 
 </Window>
 

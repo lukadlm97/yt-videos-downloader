@@ -9,14 +9,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="you-tube-369316-6209172924ab.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="you-tube-369316-6209172924ab.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

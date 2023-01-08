@@ -17,7 +17,8 @@
             <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="10">
+        <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="10"
+              IsEnabled="{Binding InvertedIsLoaded}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
@@ -51,34 +52,34 @@
                    Text="{Binding OperationDescription}"></TextBlock>
         </Grid>
 
-        <Grid Grid.Row="2" Grid.ColumnSpan="3">
+        <Grid Grid.Row="2" Grid.ColumnSpan="3"
+              IsEnabled="{Binding IsLoaded}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
-            <Button Margin=" 10 50 50 50" Grid.Column="0"
+            <Button Margin="10 50 0 50" Grid.Column="0"
                     Background="DarkRed"
                     Foreground="White"
-                    FontSize="18" Click="CancelButton_Click">
-                <StackPanel  Orientation="Horizontal">
-                    <Image Source="../assets/main-window/cancel-icon.jpg" 
-                           Width="40" Height="16"/>
-                    <TextBlock Text="Cancel selection" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
+                    Content="- Cancel selection"
+                    FontSize="18" Click="CancelButton_Click" />
 
-            <Button Grid.Column="2" Margin=" 50 50 10 50"
-                    Background="GreenYellow"
+            <Button Margin=" 10 50 10 50" Grid.Column="2"
+                    Background="CornflowerBlue"
                     Foreground="White"
-                    FontSize="18" Click="AddToExistingPlaylistButton_Click">
-                <StackPanel  Orientation="Horizontal">
-                    <Image Source="../assets/main-window/add-icon.jpg" 
-                           Width="40" Height="16"/>
-                    <TextBlock Text="Append existing list" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
+                    FontSize="18"
+                    Content="Update search"
+                    Command="{Binding UpdateSearchCommand}"/>
+                    
 
+            <Button Grid.Column="5" Margin=" 0 50 10 50"
+                    Background="DarkOliveGreen"
+                    Foreground="White"
+                    Content="+ Add song/playlist for download"
+                    FontSize="18" Click="AddToExistingPlaylistButton_Click" />
         </Grid>
     </Grid>
 </UserControl>
