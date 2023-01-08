@@ -62,6 +62,12 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
+        public Task<DownloadResponse> DownloadAndSaveToDestinationFolder(IEnumerable<string> videoUrls, IEnumerable<string> destinationFolders,
+            CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null, CancellationToken cancellationToken = default)
         {

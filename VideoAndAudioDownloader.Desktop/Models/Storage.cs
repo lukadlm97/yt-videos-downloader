@@ -62,5 +62,10 @@ namespace VideoAndAudioDownloader.Desktop.Models
         {
             return await youTubeDownloader.GetSingleSong(videoUrl);
         }
+
+        public async Task<DownloadResponse> DownloadAndSave(IEnumerable<string> videoUrls, IEnumerable<string> destinationFolders)
+        {
+            return await youTubeDownloader.DownloadAndSaveToDestinationFolder(videoUrls, destinationFolders);
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoAndAudioDownloader.Desktop.View"
         mc:Ignorable="d"
-        Height="250" Width="620">
+        d:DesignHeight="300" d:DesignWidth="620">
     <Grid MaxWidth="1000" Margin="10 10"  Background="Red">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="150" />
-            <RowDefinition  Height="*"/>
+            <RowDefinition  Height="100"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="10 10 10 0" >
             <ListView  Background="Bisque"

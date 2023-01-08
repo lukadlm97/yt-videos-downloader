@@ -62,7 +62,7 @@
                     Foreground="White"
                     FontSize="18" Click="CancelButton_Click">
                 <StackPanel  Orientation="Horizontal">
-                    <Image Source="../assets/main-window/search.png" 
+                    <Image Source="../assets/main-window/cancel-icon.jpg" 
                            Width="40" Height="16"/>
                     <TextBlock Text="Cancel selection" VerticalAlignment="Center" />
                 </StackPanel>
@@ -73,7 +73,7 @@
                     Foreground="White"
                     FontSize="18" Click="AddToExistingPlaylistButton_Click">
                 <StackPanel  Orientation="Horizontal">
-                    <Image Source="../assets/main-window/search.png" 
+                    <Image Source="../assets/main-window/add-icon.jpg" 
                            Width="40" Height="16"/>
                     <TextBlock Text="Append existing list" VerticalAlignment="Center" />
                 </StackPanel>

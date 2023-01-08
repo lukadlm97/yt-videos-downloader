@@ -1,4 +1,6 @@
-﻿using VideoAndAudioDownloader.BusinessLogic.Enumerations;
+﻿using Google.Apis.YouTube.v3.Data;
+using System.IO;
+using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.BusinessLogic.Models.DTO;
 using YoutubeExplode.Common;
@@ -169,6 +171,90 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
             }
 
             return response;
+        }
+
+        public async Task<DownloadResponse> DownloadAndSaveToDestinationFolder(IEnumerable<string> videoUrls,
+            IEnumerable<string> destinationFolders,
+            CancellationToken cancellationToken = default)
+        {
+            var response = new DownloadResponse()
+            {
+                OperationStatus = OperationStatus.Success
+            };
+            try
+            {
+                if (!videoUrls.Any()||!destinationFolders.Any())
+                {
+                    response.OperationStatus = OperationStatus.MissingParts;
+                    return response;
+                }
+
+                foreach (var videoUrl in videoUrls)
+                {
+                    if (!await SaveSingleVideoMP3(videoUrl, destinationFolders, cancellationToken: cancellationToken))
+                    {
+                        response.OperationStatus = OperationStatus.MissingParts;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.OperationStatus = OperationStatus.BadRequest;
+            }
+            return response;
+        }
+
+        public async Task<bool> SaveSingleVideoMP3(string videoUrl
+            ,IEnumerable<string> outputFolders, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var youtube = YouTubeClientFactory.CreateYoutubeClient();
+
+                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(videoUrl, cancellationToken);
+                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+
+
+                // You can specify both video ID or URL
+                var video = await youtube.Videos.GetAsync(videoUrl, cancellationToken);
+                var path = $"{video.Title}.{streamInfo.Container}";
+
+                List<FileStream> fileStreams = new List<FileStream>();
+                var outputFolder= outputFolders.First();
+                if (!string.IsNullOrWhiteSpace(outputFolder))
+                { 
+                    if (!Directory.Exists(outputFolder))
+                    {
+                        Directory.CreateDirectory(outputFolder);
+                    }
+
+                    var originalFile = Path.Combine(outputFolder, path);
+                    await using var stream = File.OpenWrite(originalFile);
+                    await youtube.Videos.Streams.CopyToAsync(streamInfo,
+                    stream,
+                    cancellationToken: cancellationToken);
+
+                    await stream.DisposeAsync();
+                    foreach (var folder in outputFolders.Skip(1))
+                    {
+                        if (!Directory.Exists(folder))
+                        {
+                            Directory.CreateDirectory(folder);
+                        }
+                        var copyPathFile = Path.Combine(folder, path);
+                        File.Copy(originalFile, copyPathFile);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

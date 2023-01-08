@@ -26,7 +26,7 @@ namespace VideoAndAudioDownloader.Desktop
         {
             InitializeComponent();
             MainWindowViewModel = new MainWindowViewModel(storage);
-            MainWindowViewModel.PlaylistUrl = "past playlist url";
+            MainWindowViewModel.SearchPlaylistUrl = "past playlist url";
             MainWindowViewModel.Songs = new ObservableCollection<Song>();
             this.DataContext = MainWindowViewModel;
         }

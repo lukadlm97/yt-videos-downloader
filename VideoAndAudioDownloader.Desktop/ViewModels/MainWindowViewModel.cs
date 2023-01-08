@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,7 @@ using VideoAndAudioDownloader.BusinessLogic.Models;
 using VideoAndAudioDownloader.Desktop.Commands;
 using VideoAndAudioDownloader.Desktop.Models;
 using VideoAndAudioDownloader.Desktop.View;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace VideoAndAudioDownloader.Desktop.ViewModels
 {
@@ -23,7 +26,21 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             this.storage = storage;
             Paths = new List<PhysicalPath>();
         }
-        public string PlaylistUrl { get; set; }
+
+        private string _searchPlaylistUrl;
+
+        public string SearchPlaylistUrl
+        {
+            get
+            {
+                return _searchPlaylistUrl;
+            }
+            set
+            {
+                _searchPlaylistUrl = value;
+                OnPropertyChanged();
+            }
+        }
         private Song _selectedSong { get; set; }
 
         public Song SelectedSong
@@ -137,7 +154,7 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
                 if (loadPlaylistCommand == null)
                 {
                     loadPlaylistCommand = new RelayCommand(
-                        async param => await LoadAsync(PlaylistUrl),
+                        async param => await LoadAsync(SearchPlaylistUrl),
                         param => true);
                 }
                 return loadPlaylistCommand;
@@ -200,6 +217,51 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             }
         }
 
+        private ICommand _saveSelectedVideosToDestinationFolderCommand;
+
+        public ICommand SaveSelectedVideosToDestinationFolderCommand
+        {
+          get{
+                if (_saveSelectedVideosToDestinationFolderCommand == null)
+                {
+                    _saveSelectedVideosToDestinationFolderCommand = 
+                        new RelayCommand(async param => await DownloadAndSave(),
+                        param => true);
+                }
+
+                return _saveSelectedVideosToDestinationFolderCommand;
+            }
+        }
+
+
+        public async Task DownloadAndSave()
+        {
+            var response = await storage.DownloadAndSave(Songs.Select(x => x.Url), Paths.Select(x => x.Path));
+            if (response.OperationStatus == OperationStatus.Success)
+            {
+                MessageBox.Show("Download and save to destination system has successfully finished!!!");
+                ReinizializationOfView();
+                return;
+            }
+
+            if (response.OperationStatus == OperationStatus.MissingParts)
+            {
+                MessageBox.Show("Some of videos or destination folders are not available now.");
+                return;
+            }
+
+            MessageBox.Show("Some network error occurred.");
+            
+        }
+
+        private void ReinizializationOfView()
+        {
+            Songs = new ObservableCollection<Song>();
+            Paths = new List<PhysicalPath>();
+            SelectedSong = null;
+            SearchPlaylistUrl=string.Empty;
+        }
+
         public void RemoveSongFromList()
         {
             if (Songs.Contains(SelectedSong))
@@ -210,15 +272,17 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
 
         public void OpenAddNewSongWindow()
         {
-            Window addNewSongWindow = new Window()
+            var rawAddNewSongViewModel = new AddNewSongViewModel(storage)
+            {
+                SearchUrl = "copy there url of source"
+            };
+                Window addNewSongWindow = new Window()
             {
                 Content = new AddNewSongUserControl(),
                 Title = "Add new song to playlist",
-                DataContext = new AddNewSongViewModel(storage)
-                {
-                    SearchUrl = "copy there url of source"
-                }
-            };
+                DataContext = rawAddNewSongViewModel,
+                Icon = rawAddNewSongViewModel.BfWindowIcon
+                };
             addNewSongWindow.ShowDialog();
             if (addNewSongWindow.DialogResult is null)
             {

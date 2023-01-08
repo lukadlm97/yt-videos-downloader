@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using ConsoleAppFramework;
 using VideoAndAudioDownloader.BusinessLogic.Enumerations;
 using VideoAndAudioDownloader.BusinessLogic.Models;
@@ -60,6 +65,21 @@ namespace VideoAndAudioDownloader.Desktop.ViewModels
             return;
             
         }
+        private BitmapFrame _bfWindowIcon;
+
+        public BitmapFrame BfWindowIcon
+        {
+            get
+            {
+                return _bfWindowIcon;
+            }
+            set
+            {
+                _bfWindowIcon = value;
+                OnPropertyChanged(nameof(BfWindowIcon));
+            }
+        }
+       
 
         private string _searchUrl;
 

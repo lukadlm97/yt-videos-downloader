@@ -34,7 +34,7 @@
                 Grid.Row="0"
                 FontSize="16"
                 Foreground="White"
-                Text="{Binding PlaylistUrl,Mode=TwoWay}"
+                Text="{Binding SearchPlaylistUrl,Mode=TwoWay}"
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
                 VerticalScrollBarVisibility="Visible"
@@ -171,6 +171,7 @@
                 Grid.Column="3"
                 Grid.Row="0"
                 Margin="10 "
+                Command="{Binding SaveSelectedVideosToDestinationFolderCommand}"
                 FontSize="16">
                 <StackPanel  Orientation="Horizontal">
 

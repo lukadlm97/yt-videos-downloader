@@ -12,5 +12,8 @@ namespace VideoAndAudioDownloader.BusinessLogic.Services
         Task<bool> SavePlaylistMP3(string videoUrl, string outputFolder = null,bool ignorePlaylistName=default, CancellationToken cancellationToken = default);
         Task<Models.DTO.PlaylistResponse> GetPlaylistSongs(string videoUrl,CancellationToken cancellationToken = default);
         Task<Models.DTO.SongResponse> GetSingleSong(string videoUrl,CancellationToken cancellationToken = default);
+
+        Task<Models.DTO.DownloadResponse> DownloadAndSaveToDestinationFolder(IEnumerable<string> videoUrls,
+            IEnumerable<string> destinationFolders, CancellationToken cancellationToken = default);
     }
 }
